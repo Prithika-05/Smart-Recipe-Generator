@@ -9,7 +9,8 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Install expo-icons if you're using Expo
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -27,14 +28,12 @@ const LoginScreen = ({ navigation }) => {
       });
 
       const data = await response.json();
+      
 
       if (response.ok) {
-        // Assuming the response contains a token or user data
-        // Save the token or user data if needed
-        // Navigate to Home on success
-        navigation.navigate('Home', { user: data });
+        await AsyncStorage.setItem('userData', JSON.stringify(data.user));
+        navigation.navigate('Home');
       } else {
-        // Handle errors (e.g., incorrect login credentials)
         Alert.alert('Login Failed', data.message || 'Please check your credentials.');
       }
     } catch (error) {

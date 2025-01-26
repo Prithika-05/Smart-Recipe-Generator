@@ -10,6 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -53,6 +54,7 @@ const SignupScreen = ({ navigation }) => {
       console.log('Response:', response.status, result);
 
       if (response.ok) {
+        await AsyncStorage.setItem('userData', JSON.stringify(data.user));
         Alert.alert('Success', 'Account created successfully!', [
           { text: 'OK', onPress: () => navigation.navigate('Login') },
         ]);
