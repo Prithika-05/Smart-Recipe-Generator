@@ -71,7 +71,7 @@ const HomePage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fffbe6',
+    backgroundColor: '#e9f5f5',
   },
   topBar: {
     padding: 20,

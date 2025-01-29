@@ -39,7 +39,7 @@ const SignupScreen = ({ navigation }) => {
       return;
     }
 
-
+    const userData = {email, password, username};
 
     try {
       const response = await fetch('https://rjvn06q4-7001.inc1.devtunnels.ms/users/create', {
@@ -54,7 +54,7 @@ const SignupScreen = ({ navigation }) => {
       console.log('Response:', response.status, result);
 
       if (response.ok) {
-        await AsyncStorage.setItem('userData', JSON.stringify(data.user));
+        await AsyncStorage.setItem('userData', JSON.stringify(userData));
         Alert.alert('Success', 'Account created successfully!', [
           { text: 'OK', onPress: () => navigation.navigate('Login') },
         ]);

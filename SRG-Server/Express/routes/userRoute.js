@@ -3,7 +3,7 @@ const { createUser, getAllUser, getUserByEmail } = require('../controllers/userC
 const router = express.Router();
 
 router.post('/create', createUser);
-router.get('/get', getAllUser);
+// router.get('/get', getAllUser);
 router.post('/login', getUserByEmail);
 
 module.exports = router;
