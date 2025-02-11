@@ -45,18 +45,21 @@ const DetectedResultPage = ({ route, navigation }) => {
               {
                 role: "system",
                 content:
-                  "You are a helpful chef assistant. Always respond in valid JSON format. Ensure 'instructions' is an array where each step is a separate string.",
+                  "You are a helpful chef assistant. Always respond in valid JSON format. Ensure 'ingredients' and 'instructions' are an array where each step is a separate string.",
               },
               {
                 role: "user",
-                content: `Generate five recipes using the following vegetables: ${vegetableList}.
+                content: `Generate five recipes using the following vegetables: ${vegetableList}, and add the measurement of  the ingredients.
               Provide a valid JSON response with the structure:
               {
                 "recipes": [
                   {
                     "name": "Recipe Name",
-                    "ingredients": ["ingredient1", "ingredient2", ...],
-                    "instructions": ["Step 1", "Step 2", "Step 3", ...]
+                    "ingredients": ["ingredient1 - 2 spoons( 30 calories)", "ingredient2 - 2( 30 calories) ", ...],
+                    "instructions": ["Step 1", "Step 2", "Step 3", ...],
+                    "Total Time Taken": "Time Taken to complete the recipe",
+                    "Total Calories": "Total Calories of the recipe eg: (350 calories)",
+                    
                   }
                 ]
               }`,
@@ -72,10 +75,12 @@ const DetectedResultPage = ({ route, navigation }) => {
 
       if (data.choices && data.choices.length > 0) {
         const rawResponse = data.choices[0].message.content.trim();
+        console.log(rawResponse)
 
         try {
           const parsedJson = JSON.parse(rawResponse);
           if (parsedJson.recipes && Array.isArray(parsedJson.recipes)) {
+          
             navigation.navigate("ShowRecipes", { recipe: parsedJson.recipes });
 
           } else {
