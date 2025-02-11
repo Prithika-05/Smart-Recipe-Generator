@@ -41,12 +41,12 @@ const ProfileScreen = ({ navigation }) => {
     },
     {
       id: 2,
-      name: "Chicken Curry",
+      name: "Chicken Curry ",
       image: require("../assets/images/Chicken-Curry.jpg"),
     },
     {
       id: 3,
-      name: "Vegan Salad",
+      name: "Vegan Salad ",
       image: require("../assets/images/Vegan-Salad.jpg"),
     },
   ];
@@ -55,19 +55,22 @@ const ProfileScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <Ionicons name="person-circle" size={24} color="#fff" />
+        <Image source={require("../assets/images/ic_launcher.png")} style={styles.logo} />
         <Text style={styles.appName}>Profile</Text>
+        <TouchableOpacity onPress={() => alert("Notifications")}>
+          <Ionicons name="notifications-outline" size={28} color="#fff" />
+        </TouchableOpacity>
       </View>
 
       {/* User Info Section */}
       <View style={styles.userInfo}>
         <View style={styles.infoRow}>
-          <Ionicons name="person" size={20} color="#333" />
+          <Ionicons name="person" size={20} color="#333" style={styles.iconStyle} />
           <Text style={styles.userInfoLabel}>Name:</Text>
           <Text style={styles.userInfoText}>{username}</Text>
         </View>
         <View style={styles.infoRow}>
-          <MaterialIcons name="email" size={20} color="#333" />
+          <MaterialIcons name="email" size={20} color="#333" style={styles.iconStyle} />
           <Text style={styles.userInfoLabel}>Email:</Text>
           <Text style={styles.userInfoText}>{email}</Text>
         </View>
@@ -75,10 +78,7 @@ const ProfileScreen = ({ navigation }) => {
 
       {/* Favorites Section */}
       <Text style={styles.sectionTitle}>Favorites</Text>
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {favorites.map((recipe) => (
           <View key={recipe.id} style={styles.recipeCard}>
             <Image source={recipe.image} style={styles.recipeImage} />
@@ -94,7 +94,6 @@ const ProfileScreen = ({ navigation }) => {
       <TouchableOpacity
         style={styles.logoutButton}
         onPress={() => {
-          // Clear user data and navigate to Login
           AsyncStorage.removeItem("userData");
           navigation.replace("Splash");
         }}
@@ -112,19 +111,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#e9f5f5",
   },
   topBar: {
-    padding: 20,
+    padding: 15,
     backgroundColor: "#f0a500",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    alignItems: "center",
     flexDirection: "row",
-    justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    resizeMode: "cover",
   },
   appName: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#fff",
-    marginLeft: 10,
+    textAlign: "center",
+    textTransform: "uppercase",
+    flex: 1,
+    letterSpacing: 1.5,
+    textShadowColor: "rgba(0, 0, 0, 0.3)",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   userInfo: {
     margin: 20,
@@ -141,17 +150,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
+    paddingHorizontal: 10,
   },
   userInfoLabel: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
-    marginLeft: 5,
+    marginLeft: 10,
+    minWidth: 60, // Ensures label width consistency
+    lineHeight:20,
   },
   userInfoText: {
     fontSize: 16,
     color: "#666",
-    marginLeft: 10,
+    flex: 1, // Ensures the text takes up remaining space properly
+    lineHeight:20,
+  },
+  iconStyle: {
+    width: 24,
+    textAlign: "center",
   },
   sectionTitle: {
     fontSize: 18,
@@ -189,6 +206,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
+    lineHeight:20,
   },
   logoutButton: {
     flexDirection: "row",

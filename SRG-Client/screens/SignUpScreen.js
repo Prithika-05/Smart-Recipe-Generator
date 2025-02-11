@@ -42,7 +42,7 @@ const SignupScreen = ({ navigation }) => {
     const userData = {email, password, username};
 
     try {
-      const response = await fetch('https://rjvn06q4-7001.inc1.devtunnels.ms/users/create', {
+      const response = await fetch('https://kvl1wj29-7001.inc1.devtunnels.ms/users/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

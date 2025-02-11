@@ -8,6 +8,7 @@ import {
   ImageBackground,
   SafeAreaView,
   Alert,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('https://rjvn06q4-7001.inc1.devtunnels.ms/users/login', {
+      const response = await fetch('https://kvl1wj29-7001.inc1.devtunnels.ms/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,6 +51,7 @@ const LoginScreen = ({ navigation }) => {
     >
       <View style={styles.overlay} />
       <SafeAreaView style={styles.container}>
+        <Image source={require('../assets/images/ic_launcher.png')} style={styles.logo} />
         <Text style={styles.title}>Welcome Back!</Text>
         <TextInput
           style={styles.input}
@@ -104,6 +106,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+  },
   title: {
     fontSize: 30,
     color: '#fff',
@@ -150,12 +157,14 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+    lineHeight:20,
   },
   link: {
     color: '#fff',
     fontSize: 16,
     textDecorationLine: 'underline',
     marginTop: 20,
+    lineHeight:20,
   },
 });
 
