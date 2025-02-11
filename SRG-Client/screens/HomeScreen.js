@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,10 +7,59 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import { BlurView } from 'expo-blur';
+import { sendImageToBackend } from '../utils/roboflowApi';
 
 const HomePage = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
+
+  const openCamera = async () => {
+    setModalVisible(false);
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log("Image URI:", result.assets[0].uri);
+      handleImageUpload(result.assets[0].uri);
+    }
+  };
+
+  const openGallery = async () => {
+    setModalVisible(false);
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [3, 4],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log("Image URI:", result.assets[0].uri);
+      handleImageUpload(result.assets[0].uri);
+    }
+  };
+
+  const handleImageUpload = async (imageUri) => {
+    setLoading(true); // Start loading
+    try {
+      await sendImageToBackend(imageUri);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
+
   const recipes = [
     { id: 1, name: 'Spaghetti Bolognese', image: require('../assets/images/Spaghetti.jpg') },
     { id: 2, name: 'Chicken Curry', image: require('../assets/images/Chicken-Curry.jpg') },
@@ -30,13 +79,18 @@ const HomePage = ({ navigation }) => {
         <Text style={styles.welcomeSubtitle}>
           Discover recipes tailored to your taste and create culinary magic.
         </Text>
-        <TouchableOpacity
-          style={styles.generatedButton}
-          onPress={() => navigation.navigate('GeneratedRecipe')}
-        >
+        <TouchableOpacity style={styles.generatedButton} onPress={() => setModalVisible(true)}>
           <Text style={styles.generatedButtonText}>Generate Your Recipe</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Loading Indicator */}
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#f0a500" />
+          <Text style={styles.loadingText}>Detecting Vegetables....</Text>
+        </View>
+      )}
 
       {/* Recommended Recipes */}
       <Text style={styles.sectionTitle}>Recommended Recipes</Text>
@@ -64,6 +118,34 @@ const HomePage = ({ navigation }) => {
           <Text style={styles.menuText}>Profile</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Modal for choosing photo source */}
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <BlurView intensity={100} style={styles.blurContainer}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Choose an Option</Text>
+
+            <TouchableOpacity style={styles.optionButton} onPress={openCamera}>
+              <Ionicons name="camera-outline" size={24} color="#fff" />
+              <Text style={styles.optionText}>Take a Picture</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.optionButton} onPress={openGallery}>
+              <Ionicons name="images-outline" size={24} color="#fff" />
+              <Text style={styles.optionText}>Upload from Gallery</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.cancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </BlurView>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -139,10 +221,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     elevation: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
   },
   recipeImage: {
     width: '100%',
@@ -168,6 +246,61 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#6c757d',
     marginTop: 4,
+  },
+  blurContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: '#333',
+    padding: 20,
+    borderRadius: 15,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 15,
+  },
+  optionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0a500',
+    padding: 12,
+    marginVertical: 8,
+    borderRadius: 10,
+    width: 200,
+    justifyContent: 'center',
+  },
+  optionText: {
+    fontSize: 16,
+    color: '#fff',
+    marginLeft: 10,
+  },
+  cancelButton: {
+    marginTop: 10,
+  },
+  cancelText: {
+    fontSize: 14,
+    color: '#bbb',
+  },
+  loadingContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background to indicate loading state
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10, // Ensures it's above other elements
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: 'white',
   },
 });
 
