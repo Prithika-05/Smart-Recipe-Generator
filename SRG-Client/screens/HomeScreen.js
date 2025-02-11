@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,23 +10,44 @@ import {
 } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
+const HeartIcon = () => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  return (
+    <TouchableOpacity
+      onPress={() => setIsFavorite(!isFavorite)}
+      activeOpacity={0.7} // Slight hover effect
+    >
+      <Ionicons
+        name={isFavorite ? 'heart' : 'heart-outline'}
+        size={20}
+        color={isFavorite ? '#f0a500' : 'black'}
+      />
+    </TouchableOpacity>
+  );
+};
+
 const HomePage = ({ navigation }) => {
   const recipes = [
     { id: 1, name: 'Spaghetti Bolognese', image: require('../assets/images/Spaghetti.jpg') },
-    { id: 2, name: 'Chicken Curry', image: require('../assets/images/Chicken-Curry.jpg') },
-    { id: 3, name: 'Vegan Salad', image: require('../assets/images/Vegan-Salad.jpg') },
+    { id: 2, name: 'Chicken Curry ', image: require('../assets/images/Chicken-Curry.jpg') },
+    { id: 3, name: 'Vegan Salad ', image: require('../assets/images/Vegan-Salad.jpg') },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <Text style={styles.appName}>Smart Recipe Generator</Text>
+        <Image source={require('../assets/images/ic_launcher.png')} style={styles.logo} />
+        <Text style={styles.appName}>Dashboard</Text>
+        <TouchableOpacity onPress={() => alert('Notifications')}>
+          <Ionicons name="notifications-outline" size={28} color="#fff" />
+        </TouchableOpacity>
       </View>
 
       {/* Welcome Section */}
       <View style={styles.welcomeSection}>
-        <Text style={styles.welcomeTitle}>Welcome to Smart Recipe Generator!</Text>
+        <Text style={styles.welcomeTitle}>Welcome to the Dashboard!</Text>
         <Text style={styles.welcomeSubtitle}>
           Discover recipes tailored to your taste and create culinary magic.
         </Text>
@@ -44,22 +65,31 @@ const HomePage = ({ navigation }) => {
         {recipes.map((recipe) => (
           <View key={recipe.id} style={styles.recipeCard}>
             <Image source={recipe.image} style={styles.recipeImage} />
-            <Text style={styles.recipeName}>{recipe.name}</Text>
+            <TouchableOpacity
+              style={styles.recipeButton}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('RecipeDetail', { recipeId: recipe.id })}
+            >
+              <View style={styles.recipeNameContainer}>
+                <Text style={styles.recipeName}>{recipe.name}</Text>
+                <HeartIcon />
+              </View>
+            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>
 
       {/* Bottom Menu Bar */}
       <View style={styles.bottomMenu}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home')}>
           <Ionicons name="home-outline" size={28} color="#f0a500" />
           <Text style={styles.menuText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('History')}>
           <MaterialIcons name="history" size={28} color="#6c757d" />
           <Text style={styles.menuText}>History</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Profile')}>
           <Ionicons name="person-outline" size={28} color="#6c757d" />
           <Text style={styles.menuText}>Profile</Text>
         </TouchableOpacity>
@@ -71,19 +101,32 @@ const HomePage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fffbe6',
+    backgroundColor: '#e9f5f5',
   },
   topBar: {
-    padding: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
     backgroundColor: '#f0a500',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    resizeMode: 'cover',
   },
   appName: {
     fontSize: 22,
     fontWeight: 'bold',
     color: '#fff',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    flex: 1,
+    letterSpacing: 1.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   welcomeSection: {
     margin: 20,
@@ -114,13 +157,17 @@ const styles = StyleSheet.create({
   generatedButton: {
     backgroundColor: '#f0a500',
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderRadius: 25,
   },
   generatedButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    lineHeight: 24,
+    paddingBottom: 2,
   },
   sectionTitle: {
     fontSize: 18,
@@ -128,6 +175,7 @@ const styles = StyleSheet.create({
     color: '#333',
     paddingHorizontal: 15,
     marginVertical: 10,
+    lineHeight: 20,
   },
   scrollView: {
     flex: 1,
@@ -139,21 +187,26 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     elevation: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
   },
   recipeImage: {
     width: '100%',
     height: 150,
   },
+  recipeButton: {
+    padding: 15,
+    alignItems: 'center',
+  },
+  recipeNameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
   recipeName: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    padding: 10,
-    textAlign: 'center',
+    lineHeight: 20,
   },
   bottomMenu: {
     flexDirection: 'row',
@@ -164,10 +217,15 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#dee2e6',
   },
+  menuItem: {
+    alignItems: 'center',
+  },
   menuText: {
     fontSize: 12,
     color: '#6c757d',
-    marginTop: 4,
+    marginTop: 2,
+    lineHeight: 18,
+    textAlign: 'center',
   },
 });
 

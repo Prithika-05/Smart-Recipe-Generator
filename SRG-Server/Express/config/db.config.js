@@ -4,9 +4,10 @@ require('dotenv').config();
 
 const db = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
+    user: 'prithi',
     password: 'prithi123',
-    database: 'SRG'
+    database: 'SRG',
+    port: 3307
 });
 
 db.connect((err) => {
