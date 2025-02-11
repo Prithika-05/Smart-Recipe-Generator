@@ -28,64 +28,71 @@ const DetectedResultPage = ({ route, navigation }) => {
 
   const generateRecipes = async () => {
     setLoading(true);
-    const vegetableList = uniqueVegetables.map((item) => item.class).join(", ");    
+    const vegetableList = uniqueVegetables.map((item) => item.class).join(", ");
+
     try {
-        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer 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`, // Replace with your OpenRouter API Key
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: "openchat/openchat-7b:free",
-              messages: [
-                { 
-                  role: "system", 
-                  content: "You are a helpful chef assistant. Always respond in valid JSON format. Ensure 'instructions' is an array where each step is a separate string." 
-                },
-                { 
-                  role: "user", 
-                  content: `Generate five recipes using the following vegetables: ${vegetableList}.
-                  Provide a valid JSON response with the structure:
+      const response = await fetch(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer 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`, // Replace with your API Key
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "openchat/openchat-7b:free",
+            messages: [
+              {
+                role: "system",
+                content:
+                  "You are a helpful chef assistant. Always respond in valid JSON format. Ensure 'instructions' is an array where each step is a separate string.",
+              },
+              {
+                role: "user",
+                content: `Generate five recipes using the following vegetables: ${vegetableList}.
+              Provide a valid JSON response with the structure:
+              {
+                "recipes": [
                   {
-                    "recipes": [
-                      {
-                        "name": "Recipe Name",
-                        "ingredients": ["ingredient1", "ingredient2", ...],
-                        "instructions": ["Step 1", "Step 2", "Step 3", ...]
-                      }
-                    ]
-                  }`
-                }
-              ],
-              max_tokens: 10000,
-              temperature: 0.5,
-            }),
-          });
-      
-        const data = await response.json();
-      
-        if (data.choices && data.choices.length > 0) {
-          const rawResponse = data.choices[0].message.content.trim();
-          console.log(rawResponse);
-      
-          // // Extract JSON part using regex
-          // const jsonMatch = rawResponse.match(/\[.*\]|\{.*\}/s);
-      
-          // if (jsonMatch) {
-          //   const validJson = jsonMatch[0]; // Extracted JSON
-          //   setRecipe(JSON.parse(validJson)); // Safely parse JSON
-          // } else {
-          //   console.error("No valid JSON found in response:", rawResponse);
-          //   setRecipe("Failed to parse valid recipes. AI returned invalid JSON.");
-          // }
-        } else {
-          setRecipe("Failed to generate recipes. Try again.");
+                    "name": "Recipe Name",
+                    "ingredients": ["ingredient1", "ingredient2", ...],
+                    "instructions": ["Step 1", "Step 2", "Step 3", ...]
+                  }
+                ]
+              }`,
+              },
+            ],
+            max_tokens: 10000,
+            temperature: 0.5,
+          }),
         }
-      } catch (error) {
-        console.error("Error fetching recipe:", error);
-        setRecipe("Failed to generate recipes. Try again.");
+      );
+
+      const data = await response.json();
+
+      if (data.choices && data.choices.length > 0) {
+        const rawResponse = data.choices[0].message.content.trim();
+
+        try {
+          const parsedJson = JSON.parse(rawResponse);
+          if (parsedJson.recipes && Array.isArray(parsedJson.recipes)) {
+            navigation.navigate("ShowRecipes", { recipe: parsedJson.recipes });
+
+          } else {
+            console.error("Invalid JSON format received:", parsedJson);
+            setRecipe(null);
+          }
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          setRecipe(null);
+        }
+      } else {
+        setRecipe(null);
       }
+    } catch (error) {
+      console.error("Error fetching recipe:", error);
+      setRecipe(null);
+    }
 
     setLoading(false);
   };
@@ -131,7 +138,7 @@ const DetectedResultPage = ({ route, navigation }) => {
       {/* Display Recipes */}
       {recipe && Array.isArray(recipe) && (
         <FlatList
-          data={recipe}
+          data={recipe} // Now correctly accessing recipes array
           keyExtractor={(item) => item.name}
           renderItem={({ item }) => (
             <View style={styles.recipeItem}>
