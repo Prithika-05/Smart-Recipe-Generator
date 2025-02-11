@@ -6,7 +6,7 @@ export const sendImageToBackend = async (imageUri) => {
     const fileInfo = await FileSystem.getInfoAsync(imageUri);
     if (!fileInfo.exists) {
       console.error("File does not exist at the given path:", imageUri);
-      return;
+      return null;
     }
 
     let formData = new FormData();
@@ -27,7 +27,10 @@ export const sendImageToBackend = async (imageUri) => {
 
     const data = await response.json();
     console.log('Response from backend:', data);
+    return data;
   } catch (error) {
+
     console.error('Error uploading image:', error);
+    return null;
   }
 };
