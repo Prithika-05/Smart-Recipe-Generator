@@ -186,7 +186,7 @@ const HomePage = ({ navigation }) => {
               style={styles.cancelButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={styles.cancelText}>Cancel </Text>
             </TouchableOpacity>
           </View>
         </BlurView>
@@ -340,6 +340,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 15,
+    lineHeight:15,
   },
   optionButton: {
     flexDirection: "row",
@@ -355,6 +356,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
     marginLeft: 10,
+    lineHeight:15,
   },
   cancelButton: {
     marginTop: 10,
@@ -378,6 +380,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: "white",
+    lineHeight:15,
   },
 });
 

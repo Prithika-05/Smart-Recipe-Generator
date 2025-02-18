@@ -8,6 +8,8 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+
 
 const DetectedResultPage = ({ route, navigation }) => {
   const { imageUri, response } = route.params;
@@ -59,7 +61,7 @@ const DetectedResultPage = ({ route, navigation }) => {
                     "instructions": ["Step 1", "Step 2", "Step 3", ...],
                     "Total Time Taken": "Time Taken to complete the recipe",
                     "Total Calories": "Total Calories of the recipe eg: (350 calories)",
-                    
+              
                   }
                 ]
               }`,
@@ -104,8 +106,17 @@ const DetectedResultPage = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
+      {/* Top Bar */}
+      <View style={styles.topBar}>
+        <Image source={require("../assets/images/ic_launcher.png")} style={styles.logo} />
+        <Text style={styles.appName}>Detection Log</Text>
+        <TouchableOpacity onPress={() => alert("Notifications")}>
+          <Ionicons name="notifications-outline" size={28} color="#fff" />
+        </TouchableOpacity>
+      </View>
+
       {/* Title */}
-      <Text style={styles.header}>Detection Result</Text>
+      <Text style={styles.header}>Image</Text>
 
       {/* Display Image */}
       <View style={styles.imageContainer}>
@@ -115,8 +126,8 @@ const DetectedResultPage = ({ route, navigation }) => {
       {/* Detected Vegetables Title */}
       <Text style={styles.sectionTitle}>Detected Vegetables</Text>
 
-      {/* Unique Vegetable List */}
-      <FlatList
+   {/* Unique Vegetable List */}
+   <FlatList
         data={uniqueVegetables}
         keyExtractor={(item) => item.class}
         renderItem={({ item }) => (
@@ -128,17 +139,19 @@ const DetectedResultPage = ({ route, navigation }) => {
       />
 
       {/* Generate Recipes Button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={generateRecipes}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Generate Recipes</Text>
-        )}
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={generateRecipes}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Generate Recipes</Text>
+          )}
+        </TouchableOpacity>
+      </View>
 
       {/* Display Recipes */}
       {recipe && Array.isArray(recipe) && (
@@ -165,53 +178,122 @@ const DetectedResultPage = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
-    padding: 20,
+    backgroundColor: "#e9f5f5",
     alignItems: "center",
   },
-  header: { fontSize: 22, fontWeight: "bold", color: "#333", marginBottom: 15 },
-  imageContainer: {
-    width: "100%",
+  topBar: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    backgroundColor: '#f0a500',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    resizeMode: 'cover',
+  },
+  appName: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    flex: 1,
+    letterSpacing: 1.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  header: { 
+    fontSize: 22, 
+    fontWeight: "bold", 
+    color: "#333", 
+    marginBottom: 15, 
+    alignSelf: "flex-start", 
+    paddingLeft: 10, // Added padding for left spacing
+    lineHeight:20,
+  },
+imageContainer: {
+    alignSelf: "center",
     alignItems: "center",
     marginBottom: 20,
-    backgroundColor: "#fff",
-    padding: 10,
-    borderRadius: 10,
-    elevation: 4,
+    backgroundColor: "#e9f5f5", // Keep the background color if needed
+    borderRadius: 5,
+    padding: 0, // Remove padding to avoid extra space
+    width: "auto", // Let it adjust to image size
+    maxWidth: "90%", // Prevent it from being too wide
   },
   image: {
-    width: "100%",
-    height: 250,
+    width: "90%", // Set to 100% to fill the container
+    height: undefined,
+    aspectRatio: 1, // Adjust this based on the image's aspect ratio
     resizeMode: "contain",
-    borderRadius: 10,
+    borderRadius: 0,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#555",
+    color: "#333",
     marginBottom: 10,
     alignSelf: "flex-start",
+    lineHeight: 15,
+    paddingLeft: 10, // Added left padding for better alignment
   },
-  listContainer: { width: "100%", paddingHorizontal: 10 },
+  listContainer: { 
+    width: "60%", 
+    paddingHorizontal: 30,
+    alignItems:"flex-end",
+  },
   itemContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: "#9AB1BC",
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 18,
     marginBottom: 10,
-    elevation: 3,
+    elevation: 6,
     flexDirection: "row",
     alignItems: "center",
+    width: "100%", // Make the container full width
+    minHeight: 45, // Set a minimum height for better appearance
+    alignSelf: "center",
+    justifyContent: "center" // Center the entire container
   },
-  itemText: { fontSize: 16, fontWeight: "500", color: "#333" },
+  itemText: { 
+    fontSize: 18, // Increase font size for better visibility
+    fontWeight: "500", 
+    color: "333",
+    textAlign: "center", // Center the text
+    flex: 1, // Allow text to fill the available space
+    lineHeight:15,
+    flexShrink: 1,
+    textAlign: "center"
+  },
+  buttonContainer: {
+    marginTop: 0,
+    marginBottom: 10,
+    width: "80%",
+    alignItems: "center",
+  },
   button: {
-    marginTop: 20,
     backgroundColor: "#f0a500",
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 10,
     elevation: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
   },
-  buttonText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    lineHeight: 15,
+    paddingBottom: 2,
+    elevation: 3,
+  },
   recipeItem: {
     backgroundColor: "#fff",
     padding: 12,
@@ -232,4 +314,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetectedResultPage;
+export default DetectedResultPage
+
