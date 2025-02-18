@@ -49,7 +49,7 @@ const DetectedResultPage = ({ route, navigation }) => {
               },
               {
                 role: "user",
-                content: `Generate five recipes using the following vegetables: ${vegetableList}, and add the measurement of  the ingredients.
+                content: `Generate five recipes using the following vegetables: ${vegetableList}, and all the recipes must be the world class dish from differnt cuisines all around the world, and add the measurement of  the ingredients.
               Provide a valid JSON response with the structure:
               {
                 "recipes": [
