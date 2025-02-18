@@ -81,7 +81,7 @@ const DetectedResultPage = ({ route, navigation }) => {
           const parsedJson = JSON.parse(rawResponse);
           if (parsedJson.recipes && Array.isArray(parsedJson.recipes)) {
           
-            navigation.navigate("ShowRecipes", { recipe: parsedJson.recipes });
+            navigation.navigate("ShowRecipes", { recipes: parsedJson.recipes });
 
           } else {
             console.error("Invalid JSON format received:", parsedJson);
