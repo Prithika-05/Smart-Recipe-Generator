@@ -9,6 +9,7 @@ import { StatusBar } from 'react-native';
 import ProfileScreen from './screens/ProfileScreen.js';
 import DetectedResultPage from './screens/DetectedScreen.js';
 import ShowRecipes from './screens/ShowRecipeScreen.js';
+import RecipeDetail from './screens/RecipeDetailScreen.js';
 
 
 const Stack = createStackNavigator();
@@ -25,7 +26,8 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
         <Stack.Screen name="DetectResult" component={DetectedResultPage}/>
-        <Stack.Screen name="ShowRecipes" component={ShowRecipes} />       
+        <Stack.Screen name="ShowRecipes" component={ShowRecipes} /> 
+        <Stack.Screen name="RecipeDetail" component={RecipeDetail} />     
       </Stack.Navigator>
     </NavigationContainer>
   );
