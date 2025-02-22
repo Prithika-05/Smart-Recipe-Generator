@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the icon library
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Statically import all images
 const images = {
@@ -14,7 +15,6 @@ const images = {
 const ShowRecipes = ({ route, navigation }) => {
   const { recipes } = route.params;
 
-  // Array of image names corresponding to the recipes
   const imageNames = [
     'recipe-image-1',
     'recipe-image-2',
@@ -25,20 +25,30 @@ const ShowRecipes = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Generated Recipes</Text>
+      {/* Top Bar */}
+      <View style={styles.topBar}>
+        <TouchableOpacity onPress={() => navigation.replace('Home')}>
+         <Image source={require("../assets/images/ic_launcher.png")} style={styles.logo} />
+        </TouchableOpacity>
+        <Text style={styles.appName}>Recipes</Text>
+        <TouchableOpacity onPress={() => alert("Notifications")}>
+          <Ionicons name="notifications-outline" size={28} color="#fff" />
+        </TouchableOpacity>
+      </View>
+
       <FlatList
         data={recipes}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
           <View style={styles.recipeCard}>
             <Image
-              source={images[imageNames[index]]} // Reference the statically imported images
+              source={images[imageNames[index]]}
               style={styles.recipeImage}
             />
             <TouchableOpacity
               style={styles.recipeButton}
               activeOpacity={0.7}
-              onPress={() => navigation.navigate('RecipeDetail', { recipe: item })}
+              onPress={() => navigation.navigate('RecipeDetail', { recipe: item ,index})}
             >
               <View style={styles.recipeNameContainer}>
                 <Text style={styles.recipeName}>{item.name}</Text>
@@ -55,15 +65,38 @@ const ShowRecipes = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
-    padding: 20,
+    backgroundColor: "#e9f5f5",
+    alignItems: "center",
   },
-  header: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#333",
+  topBar: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    backgroundColor: '#f0a500',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 15,
-    textAlign: "center",
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    resizeMode: 'cover',
+  },
+  appName: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    flex: 1,
+    letterSpacing: 1.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  listContainer: {
+    alignItems: "center", // Center all list items
+    paddingBottom: 20,
   },
   recipeCard: {
     backgroundColor: "#fff",
@@ -72,6 +105,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 3,
     alignItems: "center",
+    alignSelf: "center", // Center the card
+    width: 320, // Set a fixed width for centering
   },
   recipeImage: {
     objectFit: 'fill',
@@ -92,6 +127,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#333",
+    lineHeight:15
   },
 });
 

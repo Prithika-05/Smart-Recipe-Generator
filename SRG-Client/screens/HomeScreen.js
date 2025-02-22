@@ -25,8 +25,8 @@ const HeartIcon = () => {
     >
       <Ionicons
         name={isFavorite ? 'heart' : 'heart-outline'}
-        size={20}
-        color={isFavorite ? '#f0a500' : 'black'}
+        size={25}
+        color={isFavorite ? '#eb1313' : 'black'}
       />
     </TouchableOpacity>
   );
@@ -267,12 +267,13 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#333",
     paddingHorizontal: 15,
     marginVertical: 10,
     lineHeight: 20,
+    marginBottom : 15,
   },
   scrollView: {
     flex: 1,

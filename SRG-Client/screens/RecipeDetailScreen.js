@@ -1,17 +1,69 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Import icons if needed
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const RecipeDetail = ({ route }) => {
-  const { recipe } = route.params;
+// Statically import all images
+const images = {
+  'recipe-image-1': require('../assets/images/recipes/recipe-image-1.jpg'),
+  'recipe-image-2': require('../assets/images/recipes/recipe-image-2.jpg'),
+  'recipe-image-3': require('../assets/images/recipes/recipe-image-3.jpg'),
+  'recipe-image-4': require('../assets/images/recipes/recipe-image-4.jpg'),
+  'recipe-image-5': require('../assets/images/recipes/recipe-image-5.jpg'),
+};
+
+// Heart Icon Component
+const HeartIcon = () => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  return (
+    <TouchableOpacity
+      onPress={() => setIsFavorite(!isFavorite)}
+      activeOpacity={0.7}
+    >
+      <Ionicons
+        name={isFavorite ? 'heart' : 'heart-outline'}
+        size={28}
+        color={isFavorite ? '#eb1313' : '#fff'}
+      />
+    </TouchableOpacity>
+  );
+};
+
+const RecipeDetail = ({ route, navigation }) => {
+  const { recipe, index } = route.params; // Get recipe and index from navigation
+
+  // Dynamically select the correct image
+  const imageNames = [
+    'recipe-image-1',
+    'recipe-image-2',
+    'recipe-image-3',
+    'recipe-image-4',
+    'recipe-image-5',
+  ];
+  const selectedImage = images[imageNames[index]];
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>{recipe.name}</Text>
-        {/* Add an image for the recipe if available */}
+      {/* Top Bar */}
+      <View style={styles.topBar}>
+        <TouchableOpacity onPress={() => navigation.replace('Home')}>
+          <Image source={require("../assets/images/ic_launcher.png")} style={styles.logo} />
+        </TouchableOpacity>
+        <Text style={styles.appName}>Recipe Details</Text>
+        <HeartIcon />
       </View>
 
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}> {recipe.name} </Text>
+      </View>
+
+      {/* Recipe Image */}
+      <View style={styles.imageContainer}>
+        <Image source={selectedImage} style={styles.recipeImage} />
+      </View>
+
+      {/* Ingredients Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="restaurant" size={24} color="#666" />
@@ -22,6 +74,7 @@ const RecipeDetail = ({ route }) => {
         ))}
       </View>
 
+      {/* Instructions Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="list" size={24} color="#666" />
@@ -32,6 +85,7 @@ const RecipeDetail = ({ route }) => {
         ))}
       </View>
 
+      {/* Details Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="info" size={24} color="#666" />
@@ -47,25 +101,57 @@ const RecipeDetail = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
-    padding: 20,
+    backgroundColor: "#e9f5f5",
+  },
+  topBar: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    backgroundColor: '#f0a500',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    resizeMode: 'cover',
+  },
+  appName: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    flex: 1,
+    letterSpacing: 1.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   headerContainer: {
     alignItems: "center",
     marginBottom: 20,
   },
   header: {
+    marginTop: 15,
     fontSize: 24,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 10,
     textAlign: "center",
+    lineHeight: 20,
+  },
+  imageContainer: {
+    alignItems: "center",
+    marginBottom: 20,
   },
   recipeImage: {
-    width: '100%',
+    objectFit: 'fill',
+    width: 330,
     height: 200,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   section: {
     marginBottom: 20,
@@ -77,6 +163,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
+    width: 330,
+    alignSelf: "center",
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -88,11 +176,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#555",
     marginLeft: 8,
+    lineHeight: 20,
   },
   text: {
     fontSize: 16,
     color: "#333",
     marginBottom: 5,
+    lineHeight: 15,
   },
 });
 

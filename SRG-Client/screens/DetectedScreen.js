@@ -51,14 +51,14 @@ const DetectedResultPage = ({ route, navigation }) => {
               },
               {
                 role: "user",
-                content: `Generate five recipes using the following vegetables: ${vegetableList}, and all the recipes must be the world class dish from differnt cuisines all around the world, and add the measurement of the ingredients. the instructions must be very detailed.
-              Provide a valid JSON response with the structure:
+                content: `Generate five world-class recipes using the following vegetables: ${vegetableList}. Each recipe must represent a different renowned cuisine from around the world (e.g., Italian, Indian, Japanese, Mexican, French, etc.). The recipes should be globally recognized or highly rated dishes known for their flavor and cultural significance. Provide the exact total calorie count for the entire recip and elobrate must contains 10 points
+              Provide a valid JSON response with the structure and include all the data include Total time Taken and Total Calories :
               {
                 "recipes": [
                   {
-                    "name": "Recipe Name",
+                    "name": "Recipe Name (name of the cuisines)",
                     "ingredients": ["ingredient1 - 2 spoons( 30 calories)", "ingredient2 - 2( 30 calories) ", ...],
-                    "instructions": ["Step 1", "Step 2", "Step 3", ...],
+                    "instructions": ["Step 1", "Step 2", "Step 3","step 4", ...,"Step 10"] # minimum 8 steps,
                     "Total Time Taken": "Time Taken to complete the recipe",
                     "Total Calories": "Total Calories of the recipe eg: (350 calories)",
               
@@ -68,7 +68,7 @@ const DetectedResultPage = ({ route, navigation }) => {
               },
             ],
             max_tokens: 10000,
-            temperature: 0.5,
+            temperature: 0.3,
           }),
         }
       );
@@ -108,7 +108,9 @@ const DetectedResultPage = ({ route, navigation }) => {
     <View style={styles.container}>
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <Image source={require("../assets/images/ic_launcher.png")} style={styles.logo} />
+        <TouchableOpacity onPress={() => navigation.replace('Home')}>
+          <Image source={require("../assets/images/ic_launcher.png")} style={styles.logo} />
+        </TouchableOpacity>
         <Text style={styles.appName}>Detection Log</Text>
         <TouchableOpacity onPress={() => alert("Notifications")}>
           <Ionicons name="notifications-outline" size={28} color="#fff" />
@@ -248,7 +250,7 @@ imageContainer: {
     alignItems:"flex-end",
   },
   itemContainer: {
-    backgroundColor: "#9AB1BC",
+    backgroundColor: "#fff",
     padding: 12,
     borderRadius: 18,
     marginBottom: 10,

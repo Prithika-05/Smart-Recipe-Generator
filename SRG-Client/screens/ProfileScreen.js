@@ -55,7 +55,9 @@ const ProfileScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <Image source={require("../assets/images/ic_launcher.png")} style={styles.logo} />
+        <TouchableOpacity onPress={() => navigation.replace('Home')}>
+          <Image source={require("../assets/images/ic_launcher.png")} style={styles.logo} />
+        </TouchableOpacity>
         <Text style={styles.appName}>Profile</Text>
         <TouchableOpacity onPress={() => alert("Notifications")}>
           <Ionicons name="notifications-outline" size={28} color="#fff" />
@@ -84,7 +86,7 @@ const ProfileScreen = ({ navigation }) => {
             <Image source={recipe.image} style={styles.recipeImage} />
             <View style={styles.recipeDetails}>
               <Text style={styles.recipeName}>{recipe.name}</Text>
-              <Ionicons name="heart" size={20} color="#f0a500" />
+              <Ionicons name="heart" size={30} color="#eb1313" />
             </View>
           </View>
         ))}
@@ -222,6 +224,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     marginLeft: 10,
+    lineHeight:25,
   },
 });
 
