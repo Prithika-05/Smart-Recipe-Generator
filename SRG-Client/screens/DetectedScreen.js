@@ -51,7 +51,7 @@ const DetectedResultPage = ({ route, navigation }) => {
               },
               {
                 role: "user",
-                content: `Generate five world-class main course recipes using the following vegetables: [vegetableList]. Each recipe must represent a different renowned cuisine from around the world (e.g., Italian, Indian, Japanese, Mexican, French, etc.). Ensure that the recipes are not soups or curries. Each recipe should be a main course dish and must include the exact total calorie count for the entire recipe and the instructions must be elobarete and must contains as many points and don't include the total time taken and total calories and description in instruction .
+                content: `Generate five world-class main course recipes using the following vegetables: ${vegetableList}. Each recipe must represent a different renowned cuisine from around the world (e.g., Italian, Indian, Japanese, Mexican, French, etc.). Ensure that the recipes are not soups or curries. Each recipe should be a main course dish and must include the exact total calorie count for the entire recipe and the instructions must be elobarete and must contains as many points and don't include the total time taken and total calories and description in instruction .
               Provide a valid JSON response with the structure and format as shown below and include the following details for each recipe. Give me the recipe name, ingredients, instructions, total time taken, total calories, and a brief description of the recipe in following format.:
               Follow the format below:
               {
