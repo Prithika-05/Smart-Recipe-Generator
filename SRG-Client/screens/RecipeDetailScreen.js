@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import HeartIcon from "../components/HeartIcon";
 
 // Statically import all images
 const images = {
@@ -12,26 +12,9 @@ const images = {
   'recipe-image-5': require('../assets/images/recipes/recipe-image-5.jpg'),
 };
 
-// Heart Icon Component
-const HeartIcon = () => {
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  return (
-    <TouchableOpacity
-      onPress={() => setIsFavorite(!isFavorite)}
-      activeOpacity={0.7}
-    >
-      <Ionicons
-        name={isFavorite ? 'heart' : 'heart-outline'}
-        size={28}
-        color={isFavorite ? '#eb1313' : '#fff'}
-      />
-    </TouchableOpacity>
-  );
-};
 
 const RecipeDetail = ({ route, navigation }) => {
-  const { recipe, index } = route.params; // Get recipe and index from navigation
+  const { recipe, index } = route.params;
 
   // Dynamically select the correct image
   const imageNames = [
@@ -45,25 +28,19 @@ const RecipeDetail = ({ route, navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Top Bar */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.replace('Home')}>
           <Image source={require("../assets/images/ic_launcher.png")} style={styles.logo} />
         </TouchableOpacity>
         <Text style={styles.appName}>Recipe Details</Text>
-        <HeartIcon />
+        <HeartIcon recipe={recipe} />
       </View>
-
       <View style={styles.headerContainer}>
         <Text style={styles.header}> {recipe.name} </Text>
       </View>
-
-      {/* Recipe Image */}
       <View style={styles.imageContainer}>
         <Image source={selectedImage} style={styles.recipeImage} />
       </View>
-
-      {/* Ingredients Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="restaurant" size={24} color="#666" />
@@ -73,8 +50,6 @@ const RecipeDetail = ({ route, navigation }) => {
           <Text key={index} style={styles.text}>{ingredient}</Text>
         ))}
       </View>
-
-      {/* Instructions Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="list" size={24} color="#666" />
@@ -84,8 +59,6 @@ const RecipeDetail = ({ route, navigation }) => {
           <Text key={index} style={styles.text}>{`${index + 1}. ${step}`}</Text>
         ))}
       </View>
-
-      {/* Details Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="info" size={24} color="#666" />
@@ -97,6 +70,7 @@ const RecipeDetail = ({ route, navigation }) => {
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

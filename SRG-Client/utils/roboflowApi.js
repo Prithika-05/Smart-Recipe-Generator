@@ -16,7 +16,7 @@ export const sendImageToBackend = async (imageUri) => {
       name: 'upload.jpg',
     });
 
-    const response = await fetch('https://kvl1wj29-7002.inc1.devtunnels.ms/detect', {
+    const response = await fetch('https://rjvn06q4-7002.inc1.devtunnels.ms/detect', {
       method: 'POST',
       headers: {
         'Accept': 'application/json', // Accept JSON response

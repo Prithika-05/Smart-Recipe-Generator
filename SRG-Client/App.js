@@ -10,12 +10,14 @@ import ProfileScreen from './screens/ProfileScreen.js';
 import DetectedResultPage from './screens/DetectedScreen.js';
 import ShowRecipes from './screens/ShowRecipeScreen.js';
 import RecipeDetail from './screens/RecipeDetailScreen.js';
+import { FavoritesProvider } from './context/FavoriteContext.js';
 
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
+    <FavoritesProvider>
     <NavigationContainer>
       <StatusBar />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -30,5 +32,6 @@ export default function App() {
         <Stack.Screen name="RecipeDetail" component={RecipeDetail} />     
       </Stack.Navigator>
     </NavigationContainer>
+    </FavoritesProvider>
   );
 }
