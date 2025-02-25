@@ -151,9 +151,9 @@ const HomePage = ({ navigation }) => {
           <Ionicons name="home-outline" size={28} color="#f0a500" />
           <Text style={styles.menuText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('History')}>
-          <MaterialIcons name="history" size={28} color="#6c757d" />
-          <Text style={styles.menuText}>History</Text>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Favorites')}>
+          <Ionicons name="heart-outline" size={28} color="#6c757d" />
+          <Text style={styles.menuText}>Favorites</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Profile')}>
           <Ionicons name="person-outline" size={28} color="#6c757d" />

@@ -4,30 +4,30 @@ import { TouchableOpacity } from "react-native";
 import { useFavorites } from '../context/FavoriteContext.js';
 
 const HeartIcon = ({ recipe }) => {
-  const { favorites, toggleFavorite } = useFavorites();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [isFavoriteLocal, setIsFavoriteLocal] = useState(isFavorite(recipe.name));
 
   useEffect(() => {
-    setIsFavorite(favorites.includes(recipe.name));
-  }, [favorites, recipe.name]);
+    setIsFavoriteLocal(isFavorite(recipe.name));
+  }, [recipe.name, isFavorite]);
 
   const handleToggleFavorite = async () => {
     toggleFavorite(recipe);
     try {
-      const url = isFavorite
+      const url = isFavoriteLocal
         ? `https://rjvn06q4-7002.inc1.devtunnels.ms/favorite/${encodeURIComponent(recipe.name)}`
         : 'https://rjvn06q4-7002.inc1.devtunnels.ms/favorite';
 
       const response = await fetch(url, {
-        method: isFavorite ? 'DELETE' : 'POST',
+        method: isFavoriteLocal ? 'DELETE' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: isFavorite ? null : JSON.stringify(recipe),
+        body: isFavoriteLocal ? null : JSON.stringify(recipe),
       });
 
       if (response.ok) {
-        console.log(isFavorite ? 'Recipe removed from favorites!' : 'Recipe added to favorites!');
+        console.log(isFavoriteLocal ? 'Recipe removed from favorites!' : 'Recipe added to favorites!');
       } else {
         console.error('Failed to update favorites:', response.statusText);
       }
@@ -39,9 +39,9 @@ const HeartIcon = ({ recipe }) => {
   return (
     <TouchableOpacity onPress={handleToggleFavorite} activeOpacity={0.7}>
       <Ionicons
-        name={isFavorite ? 'heart' : 'heart-outline'}
+        name={isFavoriteLocal ? 'heart' : 'heart-outline'}
         size={28}
-        color={isFavorite ? '#eb1313' : '#fff'}
+        color={isFavoriteLocal ? '#eb1313' : '#fff'}
       />
     </TouchableOpacity>
   );

@@ -69,6 +69,12 @@ def unfavorite_recipe(recipe_name):
         return jsonify({"message": "Recipe removed from favorites!"}), 200
     else:
         return jsonify({"message": "Recipe not found in favorites!"}), 404
+    
+@app.route('/favorites', methods=['GET'])
+def get_favorites():
+    # Retrieve all favorite recipes
+    favorites = list(collection.find({}, {'_id': 0}))
+    return jsonify(favorites), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7002, debug=True)

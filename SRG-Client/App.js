@@ -11,6 +11,7 @@ import DetectedResultPage from './screens/DetectedScreen.js';
 import ShowRecipes from './screens/ShowRecipeScreen.js';
 import RecipeDetail from './screens/RecipeDetailScreen.js';
 import { FavoritesProvider } from './context/FavoriteContext.js';
+import FavoritesScreen from './screens/FavouritesScreen.js';
 
 
 const Stack = createStackNavigator();
@@ -30,6 +31,7 @@ export default function App() {
         <Stack.Screen name="DetectResult" component={DetectedResultPage}/>
         <Stack.Screen name="ShowRecipes" component={ShowRecipes} /> 
         <Stack.Screen name="RecipeDetail" component={RecipeDetail} />     
+        <Stack.Screen name="Favorites" component={FavoritesScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     </FavoritesProvider>
