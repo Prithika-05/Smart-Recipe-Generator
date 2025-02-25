@@ -51,8 +51,9 @@ const DetectedResultPage = ({ route, navigation }) => {
               },
               {
                 role: "user",
-                content: `Generate five world-class recipes using the following vegetables: ${vegetableList}. Each recipe must represent a different renowned cuisine from around the world (e.g., Italian, Indian, Japanese, Mexican, French, etc.). The recipes should be globally recognized or highly rated dishes known for their flavor and cultural significance. Provide the exact total calorie count for the entire recip and elobrate must contains 10 points
-              Provide a valid JSON response with the structure and include all the data include Total time Taken and Total Calories :
+                content: `Generate five world-class main course recipes using the following vegetables: [vegetableList]. Each recipe must represent a different renowned cuisine from around the world (e.g., Italian, Indian, Japanese, Mexican, French, etc.). Ensure that the recipes are not soups or curries. Each recipe should be a main course dish and must include the exact total calorie count for the entire recipe and the instructions must be elobarete and must contains as many points and don't include the total time taken and total calories and description in instruction .
+              Provide a valid JSON response with the structure and format as shown below and include the following details for each recipe. Give me the recipe name, ingredients, instructions, total time taken, total calories, and a brief description of the recipe in following format.:
+              Follow the format below:
               {
                 "recipes": [
                   {
@@ -61,6 +62,7 @@ const DetectedResultPage = ({ route, navigation }) => {
                     "instructions": ["Step 1", "Step 2", "Step 3","step 4", ...,"Step 10"] # minimum 8 steps,
                     "Total Time Taken": "Time Taken to complete the recipe",
                     "Total Calories": "Total Calories of the recipe eg: (350 calories)",
+                    "Description": "Description of the recipe"
               
                   }
                 ]
