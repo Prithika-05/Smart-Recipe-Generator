@@ -35,7 +35,7 @@ const FavoritesScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchFavorites();
-    const interval = setInterval(fetchFavorites, 1000); // Poll every 5 seconds
+    const interval = setInterval(fetchFavorites, 5000); // Poll every 5 seconds
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, []);
 
@@ -68,7 +68,10 @@ const FavoritesScreen = ({ navigation }) => {
               style={styles.recipeItem}
               onPress={() => navigation.navigate('RecipeDetail', { recipe, index })}
             >
-              <Text style={styles.recipeName}>{recipe.name}</Text>
+              <View style={styles.recipeTextContainer}>
+                <Text style={styles.recipeName}>{recipe.name}</Text>
+                <Text style={styles.recipeDescription}>{recipe.Description}</Text>
+              </View>
               <Ionicons name="chevron-forward-outline" size={24} color="#333" />
             </TouchableOpacity>
           ))
@@ -136,10 +139,18 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
+  recipeTextContainer: {
+    flex: 1,
+  },
   recipeName: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#333",
+  },
+  recipeDescription: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 5,
   },
   noFavoritesContainer: {
     flex: 1,
