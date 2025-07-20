@@ -20,7 +20,7 @@ export const FavoritesProvider = ({ children }) => {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await fetch('https://rjvn06q4-7002.inc1.devtunnels.ms/favorites');
+        const response = await fetch('https://kvl1wj29-7002.inc1.devtunnels.ms/favorites');
         if (response.ok) {
           const data = await response.json();
           setFavorites(data.map(recipe => recipe.name));

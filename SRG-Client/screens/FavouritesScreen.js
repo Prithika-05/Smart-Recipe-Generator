@@ -8,17 +8,23 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  Dimensions,
+  Platform,
+  useWindowDimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+
+const { width, height } = Dimensions.get("window");
 
 const FavoritesScreen = ({ navigation }) => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { width: windowWidth } = useWindowDimensions();
 
   const fetchFavorites = async () => {
     try {
       const response = await fetch(
-        "https://rjvn06q4-7002.inc1.devtunnels.ms/favorites"
+        "https://kvl1wj29-7002.inc1.devtunnels.ms/favorites"
       );
       if (response.ok) {
         const data = await response.json();
@@ -36,7 +42,7 @@ const FavoritesScreen = ({ navigation }) => {
   useEffect(() => {
     fetchFavorites();
     const interval = setInterval(fetchFavorites, 5000); // Poll every 5 seconds
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -49,14 +55,14 @@ const FavoritesScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.topBar}>
+      <View style={[styles.topBar, { paddingHorizontal: windowWidth * 0.05 }]}>        
         <Image
           source={require("../assets/images/ic_launcher.png")}
           style={styles.logo}
         />
-        <Text style={styles.appName}>Dashboard</Text>
+        <Text style={styles.appName}>Favorites</Text>
         <TouchableOpacity onPress={() => alert("Notifications")}>
-          <Ionicons name="notifications-outline" size={28} color="#fff" />
+          <Ionicons name="notifications-outline" size={windowWidth * 0.07} color="#fff" />
         </TouchableOpacity>
       </View>
 
@@ -65,19 +71,19 @@ const FavoritesScreen = ({ navigation }) => {
           favorites.map((recipe, index) => (
             <TouchableOpacity
               key={index}
-              style={styles.recipeItem}
+              style={[styles.recipeItem, { padding: windowWidth * 0.04 }]}
               onPress={() => navigation.navigate('RecipeDetail', { recipe, index })}
             >
               <View style={styles.recipeTextContainer}>
-                <Text style={styles.recipeName}>{recipe.name}</Text>
-                <Text style={styles.recipeDescription}>{recipe.Description}</Text>
+                <Text style={[styles.recipeName, { fontSize: windowWidth * 0.045 }]}>{recipe.name}</Text>
+                <Text style={[styles.recipeDescription, { fontSize: windowWidth * 0.035 }]}>{recipe.Description}</Text>
               </View>
-              <Ionicons name="chevron-forward-outline" size={24} color="#333" />
+              <Ionicons name="chevron-forward-outline" size={windowWidth * 0.06} color="#333" />
             </TouchableOpacity>
           ))
         ) : (
           <View style={styles.noFavoritesContainer}>
-            <Text style={styles.noFavoritesText}>No favorite recipes found.</Text>
+            <Text style={[styles.noFavoritesText, { fontSize: windowWidth * 0.045 }]}>No favorite recipes found.</Text>
           </View>
         )}
       </ScrollView>
@@ -96,21 +102,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   topBar: {
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    paddingVertical: Platform.OS === "ios" ? height * 0.02 : height * 0.015,
     backgroundColor: '#f0a500',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: height * 0.02,
   },
   logo: {
-    width: 40,
-    height: 40,
+    width: width * 0.1,
+    height: width * 0.1,
     resizeMode: 'cover',
   },
   appName: {
-    fontSize: 22,
+    fontSize: width * 0.06,
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
@@ -123,16 +128,15 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    paddingHorizontal: 15,
+    paddingHorizontal: width * 0.04,
   },
   recipeItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 15,
     backgroundColor: "#fff",
     borderRadius: 10,
-    marginBottom: 15,
+    marginBottom: height * 0.02,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -143,12 +147,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   recipeName: {
-    fontSize: 18,
     fontWeight: "bold",
     color: "#333",
+    lineHeight: 20,
   },
   recipeDescription: {
-    fontSize: 14,
     color: "#666",
     marginTop: 5,
   },
@@ -156,10 +159,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 20,
+    paddingTop: height * 0.02,
   },
   noFavoritesText: {
-    fontSize: 18,
     fontWeight: "bold",
     color: "#666",
   },

@@ -15,8 +15,8 @@ const HeartIcon = ({ recipe }) => {
     toggleFavorite(recipe);
     try {
       const url = isFavoriteLocal
-        ? `https://rjvn06q4-7002.inc1.devtunnels.ms/favorite/${encodeURIComponent(recipe.name)}`
-        : 'https://rjvn06q4-7002.inc1.devtunnels.ms/favorite';
+        ? `https://kvl1wj29-7002.inc1.devtunnels.ms/favorite/${encodeURIComponent(recipe.name)}`
+        : 'https://kvl1wj29-7002.inc1.devtunnels.ms/favorite';
 
       const response = await fetch(url, {
         method: isFavoriteLocal ? 'DELETE' : 'POST',
